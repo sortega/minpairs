@@ -1,0 +1,3 @@
+# minpairs
+
+Minimal pairs trainer
