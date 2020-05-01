@@ -45,7 +45,7 @@ class App extends React.Component {
   }
 
   playNextSound = state => {
-    if (state.sound || state.soundQueue.length == 0) {
+    if (state.sound || state.soundQueue.length === 0) {
       return state;
     }
     const side = state.soundQueue[0];
@@ -73,9 +73,9 @@ class App extends React.Component {
     const { Header, Content, Footer } = Layout;
     return (
       <div className="App">
-        <Layout>
+        <Layout style={{ height: "100vh" }}>
           <Header><h1>Minimal Pairs Trainer</h1></Header>
-          <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64, textAlign: "center" }}>
+          <Content className="site-layout">
             {this.state.currentQuestion ? this.renderQuestion() : this.renderStartButton()}
           </Content>
           <Footer style={{ textAlign: 'center' }}>Work in progres by sortega</Footer>
