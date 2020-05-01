@@ -3,122 +3,11 @@ import './App.css';
 import { message, Layout, Row, Col, Button } from 'antd';
 import Sound from 'react-sound';
 import 'antd/dist/antd.css';
+import Pairs from './pairs';
 
 class App extends React.Component {
   state = {
-    pairs: {
-      // "day-they": {
-      //   left: {
-      //     id: "day",
-      //     label: "day /d/"
-      //   },
-      //   right: {
-      //     id: "they",
-      //     label: "they /ð/"
-      //   }
-      // },
-      // /ɪ/ - /i:/
-      "shit-sheet": {
-        left: {
-          id: "shit",
-          label: "shit /ɪ/"
-        },
-        right: {
-          id: "sheet",
-          label: "sheet /i:/"
-        }
-      },
-      "lip-leap": {
-        left: {
-          id: "lip",
-          label: "lip /ɪ/"
-        },
-        right: {
-          id: "leap",
-          label: "leap /i:/"
-        }
-      },
-      "rich-reach": {
-        left: {
-          id: "rich",
-          label: "rich /ɪ/"
-        },
-        right: {
-          id: "reach",
-          label: "reach /i:/"
-        }
-      },
-      "still-steal": {
-        left: {
-          id: "still",
-          label: "still /ɪ/"
-        },
-        right: {
-          id: "steal",
-          label: "steal /i:/"
-        }
-      },
-      "fist-feast": {
-        left: {
-          id: "fist",
-          label: "fist /ɪ/"
-        },
-        right: {
-          id: "feast",
-          label: "feast /i:/"
-        }
-      },
-      "fit-feet": {
-        left: {
-          id: "fit",
-          label: "fit /ɪ/"
-        },
-        right: {
-          id: "feet",
-          label: "feet /i:/"
-        }
-      },
-      "slip-sleep": {
-        left: {
-          id: "slip",
-          label: "slip /ɪ/"
-        },
-        right: {
-          id: "sleep",
-          label: "sleep /i:/"
-        }
-      },
-      "sin-seen": {
-        left: {
-          id: "sin",
-          label: "sin /ɪ/"
-        },
-        right: {
-          id: "seen",
-          label: "seen /i:/"
-        }
-      },
-      "lick-leak": {
-        left: {
-          id: "lick",
-          label: "lick /ɪ/"
-        },
-        right: {
-          id: "leak",
-          label: "leak /i:/"
-        }
-      },
-      "pill-peal": {
-        left: {
-          id: "pill",
-          label: "pill /ɪ/"
-        },
-        right: {
-          id: "peal",
-          label: "peal /i:/"
-        }
-      },
-    },
+    pairs: Pairs,
     currentQuestion: null
   };
 
@@ -155,7 +44,7 @@ class App extends React.Component {
       console.log(this.state)
       const pairId = state.currentQuestion.pairId;
       const soundId = side ? state.pairs[pairId][side].id : null;
-      return {...state, currentQuestion: { ...state.currentQuestion, soundId }};
+      return { ...state, currentQuestion: { ...state.currentQuestion, soundId } };
     })
   }
 
