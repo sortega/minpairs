@@ -8,7 +8,9 @@ import Pairs from './pairs';
 class App extends React.Component {
   state = {
     pairs: Pairs,
-    currentQuestion: null
+    currentQuestion: null,
+    sound: null,
+    soundQueue: []
   };
 
   startTraining() {
@@ -26,25 +28,39 @@ class App extends React.Component {
         pairId,
         correctAnswer,
         actualAnswer: null,
-        soundId: null
-      }
+      },
+      sound: null,
+      soundQueue: []
     })
     this.play(correctAnswer);
   }
 
   doAnswer(actualAnswer) {
     this.setState({
-      currentQuestion: { ...this.state.currentQuestion, actualAnswer: actualAnswer, soundId: null }
+      currentQuestion: { ...this.state.currentQuestion, actualAnswer },
+      sound: null
     })
-    this.play(actualAnswer);
+    this.play("left");
+    this.play("right");
+  }
+
+  playNextSound = state => {
+    if (state.sound || state.soundQueue.length == 0) {
+      return state;
+    }
+    const side = state.soundQueue[0];
+    return { ...state, sound: side, soundQueue: state.soundQueue.slice(1) };
+  }
+
+  onFinishSound() {
+    this.setState(state => {
+      return this.playNextSound({ ...state, sound: null });
+    });
   }
 
   play(side) {
     this.setState(state => {
-      console.log(this.state)
-      const pairId = state.currentQuestion.pairId;
-      const soundId = side ? state.pairs[pairId][side].id : null;
-      return { ...state, currentQuestion: { ...state.currentQuestion, soundId } };
+      return this.playNextSound({ ...state, soundQueue: [...state.soundQueue, side] });
     })
   }
 
@@ -75,24 +91,30 @@ class App extends React.Component {
   }
 
   renderQuestion() {
-    const { pairId, correctAnswer, actualAnswer, soundId } = this.state.currentQuestion;
-    console.log(this.state)
-    const pair = this.state.pairs[pairId];
-    const soundUrl = `/sounds/${soundId}.mp3`;
+    const { sound, pairs, currentQuestion } = this.state;
+    const { pairId, correctAnswer, actualAnswer } = currentQuestion;
+    const pair = pairs[pairId];
+
+    console.log("actualAnswer", actualAnswer, "sound", sound, "loadings", !!(actualAnswer && sound === "left"), !!(actualAnswer && sound === "right"))
+
     return (<div className="question-card">
-      <Sound url={soundUrl} playStatus={soundId ? Sound.status.PLAYING : Sound.status.STOPPED} />
+      {this.renderSound()}
       <Row gutter={[16, 16]}>
         <Col span={12}>
           <Button className="answer"
             type={actualAnswer && (correctAnswer === "left") ? "primary" : "default"}
-            onClick={(actualAnswer ? this.play : this.doAnswer).bind(this, ["left"])}>
+            onClick={(actualAnswer ? this.play : this.doAnswer).bind(this, "left")}
+            loading={!!(actualAnswer && sound === "left")}
+            danger={actualAnswer === "left" && actualAnswer !== correctAnswer}>
             {pair.left.label}
           </Button>
         </Col>
         <Col span={12}>
           <Button className="answer"
             type={actualAnswer && (correctAnswer === "right") ? "primary" : "default"}
-            onClick={(actualAnswer ? this.play : this.doAnswer).bind(this, ["right"])}>
+            onClick={(actualAnswer ? this.play : this.doAnswer).bind(this, "right")}
+            loading={!!(actualAnswer && sound === "right")}
+            danger={actualAnswer === "right" && actualAnswer !== correctAnswer}>
             {pair.right.label}
           </Button>
         </Col>
@@ -102,11 +124,28 @@ class App extends React.Component {
           {
             actualAnswer
               ? <Button className="action" onClick={this.nextQuestion.bind(this)}>Next</Button>
-              : <Button className="action" onClick={this.play.bind(this, [correctAnswer])}>Replay</Button>
+              : <Button
+                className="action"
+                onClick={this.play.bind(this, [correctAnswer])}
+                loading={!!sound}>
+                Replay
+              </Button>
           }
         </Col>
       </Row>
     </div>);
+  }
+
+  renderSound() {
+    const { sound, pairs, currentQuestion } = this.state;
+    const pairId = currentQuestion.pairId;
+    const soundId = sound ? pairs[pairId][sound].id : null;
+    const soundUrl = `/sounds/${soundId}.mp3`;
+    return (<Sound
+      url={soundUrl}
+      playStatus={soundId ? Sound.status.PLAYING : Sound.status.STOPPED}
+      onFinishedPlaying={this.onFinishSound.bind(this)}
+    />);
   }
 }
 
