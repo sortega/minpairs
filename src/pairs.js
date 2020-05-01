@@ -303,6 +303,210 @@ const Pairs = {
             label: "gull /ʌ/"
         }
     },
+
+    // /ɑ/ vs /æ/
+    "top-tap": {
+        left: {
+            id: "top",
+            label: "top /ɑ/"
+        },
+        right: {
+            id: "tap",
+            label: "tap /æ/"
+        }
+    },
+    "hot-hat": {
+        left: {
+            id: "hot2",
+            label: "hot /ɑ/"
+        },
+        right: {
+            id: "hat",
+            label: "hat /æ/"
+        }
+    },
+    "rock-rack": {
+        left: {
+            id: "rock",
+            label: "rock /ɑ/"
+        },
+        right: {
+            id: "rack",
+            label: "rack /æ/"
+        }
+    },
+    "bog-bag": {
+        left: {
+            id: "bog",
+            label: "bog /ɑ/"
+        },
+        right: {
+            id: "bag",
+            label: "bag /æ/"
+        }
+    },
+    "fog-fag": {
+        left: {
+            id: "fog",
+            label: "fog /ɑ/"
+        },
+        right: {
+            id: "fag",
+            label: "fag /æ/"
+        }
+    },
+    "gob-gab": {
+        left: {
+            id: "gob",
+            label: "gob /ɑ/"
+        },
+        right: {
+            id: "gab",
+            label: "gab /æ/"
+        }
+    },
+    "mop-map": {
+        left: {
+            id: "mop",
+            label: "mop /ɑ/"
+        },
+        right: {
+            id: "map",
+            label: "map /æ/"
+        }
+    },
+    "sock-sack": {
+        left: {
+            id: "sock2",
+            label: "sock /ɑ/"
+        },
+        right: {
+            id: "sack",
+            label: "sack /æ/"
+        }
+    },
+    "lost-last": {
+        left: {
+            id: "lost",
+            label: "lost /ɑ/"
+        },
+        right: {
+            id: "last",
+            label: "last /æ/"
+        }
+    },
+    "pot-pat": {
+        left: {
+            id: "pot2",
+            label: "pot /ɑ/"
+        },
+        right: {
+            id: "pat",
+            label: "pat /æ/"
+        }
+    },
+    "flop-flap": {
+        left: {
+            id: "flop",
+            label: "pot /ɑ/"
+        },
+        right: {
+            id: "flap",
+            label: "pat /æ/"
+        }
+    },
+    "lob-lab": {
+        left: {
+            id: "lob",
+            label: "lob /ɑ/"
+        },
+        right: {
+            id: "lab",
+            label: "lab /æ/"
+        }
+    },
+
+    // /æ/ vs /e/
+    "bat-bet": {
+        left: {
+            id: "bat",
+            label: "bat /æ/"
+        },
+        right: {
+            id: "bet",
+            label: "bet /e/"
+        }
+    },
+    "sad-said": {
+        left: {
+            id: "sad",
+            label: "sad /æ/"
+        },
+        right: {
+            id: "said",
+            label: "said /e/"
+        }
+    },
+    "had-head": {
+        left: {
+            id: "had",
+            label: "had /æ/"
+        },
+        right: {
+            id: "head",
+            label: "head /e/"
+        }
+    },
+    "cattle-kettle": {
+        left: {
+            id: "cattle",
+            label: "cattle /æ/"
+        },
+        right: {
+            id: "kettle",
+            label: "kettle /e/"
+        }
+    },
+    "lad-lead": {
+        left: {
+            id: "lad",
+            label: "lad /æ/"
+        },
+        right: {
+            id: "lead",
+            label: "lead /e/"
+        }
+    },
+    "gas-guess": {
+        left: {
+            id: "gas",
+            label: "gas /æ/"
+        },
+        right: {
+            id: "guess",
+            label: "guess /e/"
+        }
+    },
+    "slapped-slept": {
+        left: {
+            id: "slapped",
+            label: "slapped /æ/"
+        },
+        right: {
+            id: "slept",
+            label: "slept /e/"
+        }
+    },
+    "past-pest": {
+        left: {
+            id: "past",
+            label: "past /æ/"
+        },
+        right: {
+            id: "pest",
+            label: "pest /e/"
+        }
+    },
 };
 
 export default Pairs;
