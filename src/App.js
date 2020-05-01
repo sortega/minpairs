@@ -95,8 +95,6 @@ class App extends React.Component {
     const { pairId, correctAnswer, actualAnswer } = currentQuestion;
     const pair = pairs[pairId];
 
-    console.log("actualAnswer", actualAnswer, "sound", sound, "loadings", !!(actualAnswer && sound === "left"), !!(actualAnswer && sound === "right"))
-
     return (<div className="question-card">
       {this.renderSound()}
       <Row gutter={[16, 16]}>
