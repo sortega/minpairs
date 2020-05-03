@@ -8,6 +8,8 @@ import Pairs from './pairs';
 class App extends React.Component {
   state = {
     pairs: Pairs,
+    activePairs: [],
+    questionOutcomes: [],
     currentQuestion: null,
     sound: null,
     soundQueue: []
@@ -15,33 +17,74 @@ class App extends React.Component {
 
   startTraining() {
     // TODO: reset stats
-    this.nextQuestion()
+    this.setState(state => {
+      return {
+        ...state,
+        activePairs: Object.keys(state.pairs),
+        questionOutcomes: []
+      };
+    });
+    this.nextQuestion();
   }
 
   nextQuestion() {
-    const pairs = this.state.pairs;
-    const pairIds = Object.keys(pairs);
-    const pairId = pairIds[Math.floor(Math.random() * pairIds.length)]
     const correctAnswer = (Math.random() < 0.5) ? "left" : "right";
-    this.setState({
-      currentQuestion: {
-        pairId,
-        correctAnswer,
-        actualAnswer: null,
-      },
-      sound: null,
-      soundQueue: []
-    })
+    this.setState(state => {
+      const { activePairs } = state;
+      const pairId = activePairs[Math.floor(Math.random() * activePairs.length)]
+      return {
+        currentQuestion: {
+          pairId,
+          correctAnswer,
+          actualAnswer: null,
+        },
+        sound: null,
+        soundQueue: []
+      }
+    });
     this.play(correctAnswer);
   }
 
   doAnswer(actualAnswer) {
-    this.setState({
-      currentQuestion: { ...this.state.currentQuestion, actualAnswer },
-      sound: null
+    this.setState(state => {
+      const currentQuestion = { ...state.currentQuestion, actualAnswer };
+      const questionOutcomes = [...state.questionOutcomes, currentQuestion];
+      const doneWithPair = this.areWeDoneWithPair(state.currentQuestion.pairId, questionOutcomes);
+      return {
+        ...state,
+        activePairs: doneWithPair ? state.activePairs.filter(pairId => pairId !== state.currentQuestion.pairId) : state.activePairs,
+        currentQuestion,
+        sound: null,
+        questionOutcomes
+      };
     })
-    this.play("left");
-    this.play("right");
+    this.play(actualAnswer);
+    this.play(actualAnswer === "right" ? "left" : "right");
+  }
+
+  areWeDoneWithPair(pairId, questionOutcomes) {
+    const outcomes = questionOutcomes
+      .filter(outcome => outcome.pairId === pairId)
+      .map(outcome => ({
+        right: outcome.correctAnswer === outcome.actualAnswer,
+        side: outcome.correctAnswer
+      }));
+    let streakSize = 0;
+    let lastRightSide = null;
+    for (let i = 0; i < outcomes.length; i++) {
+      if (outcomes[i].right) {
+        if (outcomes[i].side !== lastRightSide) {
+          streakSize += 1;
+          lastRightSide = outcomes[i].side;
+        }
+      } else {
+        streakSize = 0;
+        lastRightSide = null;
+      }
+    }
+    console.log("outcomes: ", outcomes);
+    console.log("streal size: ", streakSize);
+    return streakSize >= 2;
   }
 
   playNextSound = state => {
@@ -76,7 +119,7 @@ class App extends React.Component {
         <Layout style={{ height: "100vh" }}>
           <Header><h1>Minimal Pairs Trainer</h1></Header>
           <Content className="site-layout">
-            {this.state.currentQuestion ? this.renderQuestion() : this.renderStartButton()}
+            {this.state.activePairs.length > 0 ? this.renderQuestion() : this.renderStartButton()}
           </Content>
           <Footer style={{ textAlign: 'center' }}>Work in progres by sortega</Footer>
         </Layout>
@@ -95,8 +138,12 @@ class App extends React.Component {
     const { pairId, correctAnswer, actualAnswer } = currentQuestion;
     const pair = pairs[pairId];
 
+    console.log("outcomes:", this.state.questionOutcomes)
+    console.log("active:", this.state.activePairs)
+
     return (<div className="question-card">
       {this.renderSound()}
+      Active pairs: {this.state.activePairs.length}
       <Row gutter={[16, 16]}>
         <Col span={12}>
           <Button className="answer"
@@ -121,7 +168,11 @@ class App extends React.Component {
         <Col span={24}>
           {
             actualAnswer
-              ? <Button className="action" onClick={this.nextQuestion.bind(this)}>Next</Button>
+              ? <Button
+                className="action"
+                onClick={this.nextQuestion.bind(this)}>
+                Next
+                </Button>
               : <Button
                 className="action"
                 onClick={this.play.bind(this, [correctAnswer])}
