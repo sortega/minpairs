@@ -1,12 +1,19 @@
 import React from 'react';
 import './App.css';
-import { message, Layout, Row, Col, Button } from 'antd';
+import { Button, Col, InputNumber, Layout, message, Row } from 'antd';
 import Sound from 'react-sound';
 import 'antd/dist/antd.css';
 import Pairs from './pairs';
 
+function randomSubset(array, size) {
+  let expanded = array.map(value => ({value, score: Math.random()}))
+  expanded.sort(pair => pair.score);
+  return expanded.slice(0, size).map(pair => pair.value);
+}
+
 class App extends React.Component {
   state = {
+    pairsToTrain: Object.keys(Pairs).length,
     pairs: Pairs,
     activePairs: [],
     questionOutcomes: [],
@@ -17,9 +24,10 @@ class App extends React.Component {
 
   startTraining() {
     this.setState(state => {
+      const allPairs = Object.keys(state.pairs);
       return {
         ...state,
-        activePairs: Object.keys(state.pairs),
+        activePairs: randomSubset(allPairs, state.pairsToTrain),
         questionOutcomes: []
       };
     });
@@ -81,8 +89,6 @@ class App extends React.Component {
         lastRightSide = null;
       }
     }
-    console.log("outcomes: ", outcomes);
-    console.log("streal size: ", streakSize);
     return streakSize >= 2;
   }
 
@@ -118,7 +124,7 @@ class App extends React.Component {
         <Layout style={{ height: "100vh" }}>
           <Header><h1>Minimal Pairs Trainer</h1></Header>
           <Content className="site-layout">
-            {this.state.activePairs.length > 0 ? this.renderQuestion() : this.renderStartButton()}
+            {this.state.activePairs.length > 0 ? this.renderQuestion() : this.renderSelectTraining()}
           </Content>
           <Footer style={{ textAlign: 'center' }}>Work in progres by sortega</Footer>
         </Layout>
@@ -126,19 +132,34 @@ class App extends React.Component {
     );
   }
 
-  renderStartButton() {
-    return (<Button type="primary" onClick={this.startTraining.bind(this)}>
-      Start training
-    </Button>);
+  renderSelectTraining() {
+    return (
+      <>
+        <Row gutter={[16, 16]} style={{textAlign: "left"}}>
+          <Col span={12} style={{ textAlign: "right", lineHeight: "32px" }}>
+            Pairs to train
+          </Col>
+          <Col span={12}>
+            <InputNumber
+              min={1}
+              max={this.state.pairs.length}
+              value={this.state.pairsToTrain}
+              onChange={value => this.setState({pairsToTrain: value})}
+            />
+          </Col>
+        </Row>
+
+        <Button type="primary" onClick={this.startTraining.bind(this)}>
+          Start training
+        </Button>
+      </>
+    );
   }
 
   renderQuestion() {
     const { sound, pairs, currentQuestion } = this.state;
     const { pairId, correctAnswer, actualAnswer } = currentQuestion;
     const pair = pairs[pairId];
-
-    console.log("outcomes:", this.state.questionOutcomes)
-    console.log("active:", this.state.activePairs)
 
     return (<div className="question-card">
       {this.renderSound()}
