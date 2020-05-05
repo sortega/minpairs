@@ -16,7 +16,6 @@ class App extends React.Component {
   };
 
   startTraining() {
-    // TODO: reset stats
     this.setState(state => {
       return {
         ...state,

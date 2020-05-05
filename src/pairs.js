@@ -408,11 +408,11 @@ const Pairs = {
     "flop-flap": {
         left: {
             id: "flop",
-            label: "pot /ɑ/"
+            label: "flop /ɑ/"
         },
         right: {
             id: "flap",
-            label: "pat /æ/"
+            label: "flap /æ/"
         }
     },
     "lob-lab": {
