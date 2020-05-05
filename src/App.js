@@ -150,7 +150,7 @@ class App extends React.Component {
             onClick={(actualAnswer ? this.play : this.doAnswer).bind(this, "left")}
             loading={!!(actualAnswer && sound === "left")}
             danger={actualAnswer === "left" && actualAnswer !== correctAnswer}>
-            {pair.left.label}
+            {pair.left.label} /{pair.left.phoneme}/
           </Button>
         </Col>
         <Col span={12}>
@@ -159,7 +159,7 @@ class App extends React.Component {
             onClick={(actualAnswer ? this.play : this.doAnswer).bind(this, "right")}
             loading={!!(actualAnswer && sound === "right")}
             danger={actualAnswer === "right" && actualAnswer !== correctAnswer}>
-            {pair.right.label}
+            {pair.right.label} /{pair.right.phoneme}/
           </Button>
         </Col>
       </Row>
