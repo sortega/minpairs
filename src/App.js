@@ -6,9 +6,9 @@ import 'antd/dist/antd.css';
 import Pairs from './pairs';
 
 function randomSubset(array, size) {
-  let expanded = array.map(value => ({value, score: Math.random()}))
-  expanded.sort(pair => pair.score);
-  return expanded.slice(0, size).map(pair => pair.value);
+  return array.map(value => ({ value, score: Math.random() }))
+    .sort((a, b) => a.score <= b.score)
+    .slice(0, size).map(pair => pair.value);
 }
 
 class App extends React.Component {
