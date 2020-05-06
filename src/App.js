@@ -1,9 +1,12 @@
 import React from 'react';
-import './App.css';
 import { Button, Col, InputNumber, Layout, message, Row } from 'antd';
+
 import Sound from 'react-sound';
-import 'antd/dist/antd.css';
 import Pairs from './pairs';
+import SessionStats from './SessionStats';
+
+import 'antd/dist/antd.css';
+import './App.css';
 
 function randomSubset(array, size) {
   return array.map(value => ({ value, score: Math.random() }))
@@ -16,7 +19,7 @@ class App extends React.Component {
     pairsToTrain: Object.keys(Pairs).length,
     pairs: Pairs,
     activePairs: [],
-    questionOutcomes: [],
+    questionOutcomes: null,
     currentQuestion: null,
     sound: null,
     soundQueue: []
@@ -124,7 +127,13 @@ class App extends React.Component {
         <Layout style={{ height: "100vh" }}>
           <Header><h1>Minimal Pairs Trainer</h1></Header>
           <Content className="site-layout">
-            {this.state.activePairs.length > 0 ? this.renderQuestion() : this.renderSelectTraining()}
+            {
+              this.state.activePairs.length > 0 ?
+                this.renderQuestion() :
+                (this.state.questionOutcomes ?
+                  this.renderStats() :
+                  this.renderSelectTraining())
+            }
           </Content>
           <Footer style={{ textAlign: 'center' }}>Work in progres by sortega</Footer>
         </Layout>
@@ -135,7 +144,7 @@ class App extends React.Component {
   renderSelectTraining() {
     return (
       <>
-        <Row gutter={[16, 16]} style={{textAlign: "left"}}>
+        <Row gutter={[16, 16]} style={{ textAlign: "left" }}>
           <Col span={12} style={{ textAlign: "right", lineHeight: "32px" }}>
             Pairs to train
           </Col>
@@ -144,7 +153,7 @@ class App extends React.Component {
               min={1}
               max={this.state.pairs.length}
               value={this.state.pairsToTrain}
-              onChange={value => this.setState({pairsToTrain: value})}
+              onChange={value => this.setState({ pairsToTrain: value })}
             />
           </Col>
         </Row>
@@ -215,6 +224,13 @@ class App extends React.Component {
       playStatus={soundId ? Sound.status.PLAYING : Sound.status.STOPPED}
       onFinishedPlaying={this.onFinishSound.bind(this)}
     />);
+  }
+
+  renderStats() {
+    return (<SessionStats
+      pairs={this.state.pairs}
+      outcomes={this.state.questionOutcomes}
+      onDismiss={() => this.setState({ questionOutcomes: null })} />);
   }
 }
 
