@@ -31,11 +31,11 @@ function SessionStats(props) {
     ];
 
     return <>
-        <Table 
-            dataSource={stats} 
+        <Table
+            dataSource={stats}
             columns={columns}
-            sortedInfo={{order: "ascend", columnKey: "label"}}
-            />
+            sortedInfo={{ order: "ascend", columnKey: "label" }}
+        />
 
         <Button type="primary" onClick={props.onDismiss}>
             Dismiss
@@ -43,7 +43,6 @@ function SessionStats(props) {
     </>;
 }
 
-export default SessionStats;
 
 function summarizeOutcomes(props) {
     const outcomeSummary = {};
@@ -62,3 +61,5 @@ function summarizeOutcomes(props) {
     });
     return outcomeSummary;
 }
+
+export default SessionStats;

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Col, InputNumber, Layout, message, Row } from 'antd';
-
+import { Button, Col, Layout, message, Row } from 'antd';
 import Sound from 'react-sound';
-import Pairs from './pairs';
+
 import SessionStats from './SessionStats';
+import SessionOptions from './SessionOptions';
+import Pairs from './pairs';
 
 import 'antd/dist/antd.css';
 import './App.css';
@@ -16,7 +17,6 @@ function randomSubset(array, size) {
 
 class App extends React.Component {
   state = {
-    pairsToTrain: Object.keys(Pairs).length,
     pairs: Pairs,
     activePairs: [],
     questionOutcomes: null,
@@ -25,12 +25,12 @@ class App extends React.Component {
     soundQueue: []
   };
 
-  startTraining() {
+  startTraining(options) {
     this.setState(state => {
       const allPairs = Object.keys(state.pairs);
       return {
         ...state,
-        activePairs: randomSubset(allPairs, state.pairsToTrain),
+        activePairs: randomSubset(allPairs, options.pairsToTrain),
         questionOutcomes: []
       };
     });
@@ -142,27 +142,10 @@ class App extends React.Component {
   }
 
   renderSelectTraining() {
-    return (
-      <>
-        <Row gutter={[16, 16]} style={{ textAlign: "left" }}>
-          <Col span={12} style={{ textAlign: "right", lineHeight: "32px" }}>
-            Pairs to train
-          </Col>
-          <Col span={12}>
-            <InputNumber
-              min={1}
-              max={this.state.pairs.length}
-              value={this.state.pairsToTrain}
-              onChange={value => this.setState({ pairsToTrain: value })}
-            />
-          </Col>
-        </Row>
-
-        <Button type="primary" onClick={this.startTraining.bind(this)}>
-          Start training
-        </Button>
-      </>
-    );
+    return (<SessionOptions
+      pairs={this.state.pairs}
+      onComplete={this.startTraining.bind(this)}
+    />);
   }
 
   renderQuestion() {
