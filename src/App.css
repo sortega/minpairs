@@ -2,6 +2,14 @@
   color: #eee;
 }
 
+#logo {
+  height: 25px;
+  background-color: white;
+  padding: 5px;
+  margin-right: 0.5em;
+  vertical-align: sub;
+}
+
 .site-layout {
   padding: 0 50px;
   margin-top: 32px;

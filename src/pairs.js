@@ -1,16 +1,16 @@
 const Pairs = {
     // /d/ vs /ð/
     "day-they": {
-        left: {
-            id: "day",
-            label: "day",
+      left: {
+        id: "day",
+        label: "day",
             phoneme: "d"
-        },
-        right: {
-            id: "they",
-            label: "they",
+      },
+      right: {
+        id: "they",
+        label: "they",
             phoneme: "ð"
-        }
+      }
     },
 
     // /ɪ/ vs /i:/

@@ -139,7 +139,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Layout style={{ height: "100vh" }}>
-          <Header><h1>Minimal Pairs Trainer</h1></Header>
+          <Header><h1><img id="logo" src="/minpairs.png" alt="Minpairs logo"/>Minimal Pairs Trainer</h1></Header>
           <Content className="site-layout">
             {
               this.state.activePairs.length > 0 ?
