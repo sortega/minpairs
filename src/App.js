@@ -15,6 +15,20 @@ function randomSubset(array, size) {
     .slice(0, size).map(pair => pair.value);
 }
 
+function filterByPhoneme(allPairs, phonemePairs) {
+  return Object.entries(allPairs)
+    .flatMap(([id, pair]) => {
+      if (phonemePairs.find(phonemePair =>
+        phonemePair.left === pair.left.phoneme &&
+        phonemePair.right === pair.right.phoneme
+      )) {
+        return [id];
+      } else {
+        return [];
+      }
+    });
+}
+
 class App extends React.Component {
   state = {
     pairs: Pairs,
@@ -27,10 +41,10 @@ class App extends React.Component {
 
   startTraining(options) {
     this.setState(state => {
-      const allPairs = Object.keys(state.pairs);
+      const filteredPairs = filterByPhoneme(state.pairs, options.phonemePairs);
       return {
         ...state,
-        activePairs: randomSubset(allPairs, options.pairsToTrain),
+        activePairs: randomSubset(filteredPairs, options.pairsToTrain),
         questionOutcomes: []
       };
     });

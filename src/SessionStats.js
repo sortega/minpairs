@@ -8,7 +8,7 @@ function SessionStats(props) {
     const stats = Object.keys(outcomeSummary).map(label => {
         const { successes, failures } = outcomeSummary[label];
         const reps = successes + failures;
-        const accuracy = (successes * 100 / reps).toFixed(1) + "%";
+        const accuracy = successes / reps;
         return ({ label, reps, accuracy });
     });
 
@@ -27,6 +27,7 @@ function SessionStats(props) {
             title: 'Accuracy',
             dataIndex: 'accuracy',
             key: 'accuracy',
+            render: accuracy => (accuracy * 100).toFixed(1) + "%"
         },
     ];
 
