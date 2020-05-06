@@ -6,4 +6,6 @@ Usage: `npm start`
 * Keyboard shortcuts
 * Able to select which pairs to train
 * Logo in app header
-* Stats screen after a training session
+* Stats screen
+  * Time stats
+* Not losing the state on page reload
