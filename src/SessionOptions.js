@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Col, InputNumber, Row, Table } from 'antd';
 
-
 class SessionOptions extends React.Component {
     state = {
         pairsToTrain: Object.keys(this.props.pairs).length,
@@ -17,13 +16,18 @@ class SessionOptions extends React.Component {
     }
 
     uniquePairs() {
-        const deduped = new Map(Object.values(this.props.pairs).map(pair => {
+        const deduped = {};
+        Object.values(this.props.pairs).forEach(pair => {
             const left = pair.left.phoneme;
             const right = pair.right.phoneme;
             const key = `/${left}/ vs /${right}/`;
-            return ([key, { key, left, right }]);
-        }));
-        return [...deduped.values()];
+            if (deduped[key]) {
+                deduped[key].count += 1;
+            } else {
+                deduped[key] = { key, left, right, count: 1 };
+            }
+        });
+        return [...Object.values(deduped)];
     }
 
     render() {
@@ -34,6 +38,11 @@ class SessionOptions extends React.Component {
                 title: 'Phonemes',
                 dataIndex: 'key',
                 key: 'key',
+            },
+            {
+                title: 'Pairs',
+                dataIndex: 'count',
+                key: 'count'
             }
         ];
 
