@@ -1,18 +1,4 @@
-const Pairs = {
-    // /d/ vs /ð/
-    "day-they": {
-      left: {
-        id: "day",
-        label: "day",
-            phoneme: "d"
-      },
-      right: {
-        id: "they",
-        label: "they",
-            phoneme: "ð"
-      }
-    },
-
+const MasonPairs = {
     // /ɪ/ vs /i:/
     "shit-sheet": {
         left: {
@@ -608,6 +594,145 @@ const Pairs = {
             phoneme: "e"
         }
     },
+}
+
+const OtherPairs = {
+    // /b/ vs /v/
+    "sybil-civil": {
+        left: {
+            id: "sybil",
+            label: "sybil",
+            phoneme: "b"
+        },
+        right: {
+            id: "civil",
+            label: "civil",
+            phoneme: "v"
+        }
+    },
+    "bury-very": {
+        left: {
+            id: "bury",
+            label: "bury",
+            phoneme: "b"
+        },
+        right: {
+            id: "very",
+            label: "very",
+            phoneme: "v"
+        }
+    },
+    "verb-verve": {
+        left: {
+            id: "verb",
+            label: "verb",
+            phoneme: "b"
+        },
+        right: {
+            id: "verve",
+            label: "verve",
+            phoneme: "v"
+        }
+    },
+    "trouble-travel": {
+        left: {
+            id: "trouble",
+            label: "trouble",
+            phoneme: "b"
+        },
+        right: {
+            id: "travel",
+            label: "travel",
+            phoneme: "v"
+        }
+    },
+    "saber-saver": {
+        left: {
+            id: "saber",
+            label: "saber",
+            phoneme: "b"
+        },
+        right: {
+            id: "saver",
+            label: "saver",
+            phoneme: "v"
+        }
+    },
+
+    // /d/ vs /ð/
+    "day-they": { // TODO: Improve audio
+        left: {
+            id: "day",
+            label: "day",
+            phoneme: "d"
+        },
+        right: {
+            id: "they",
+            label: "they",
+            phoneme: "ð"
+        }
+    },
+
+    // /s/ vs /ʃ/
+    "sore-shore": {
+        left: {
+            id: "sore",
+            label: "sore",
+            phoneme: "s"
+        },
+        right: {
+            id: "shore",
+            label: "shore",
+            phoneme: "ʃ"
+        }
+    },
+
+    // /ɑ/ vs /ʌ/
+    
+    // /ʌ/ vs /æ/
+    "tusk-task": {
+        left: {
+            id: "tusk",
+            label: "tusk",
+            phoneme: "ʌ"
+        },
+        right: {
+            id: "task",
+            label: "task",
+            phoneme: "æ"
+        }
+    },
+    "bluster-blaster": {
+        left: {
+            id: "bluster",
+            label: "bluster",
+            phoneme: "ʌ"
+        },
+        right: {
+            id: "blaster",
+            label: "blaster",
+            phoneme: "æ"
+        }
+    },
+
+    // /ɪ/ vs /i:/
+    "whistle-weasel": {
+        left: {
+            id: "whistle",
+            label: "whistle",
+            phoneme: "ɪ"
+        },
+        right: {
+            id: "weasel",
+            label: "weasel",
+            phoneme: "i:"
+        }
+    },
+}
+
+const Pairs = {
+    ...MasonPairs,
+    ...OtherPairs
 };
 
 export default Pairs;
