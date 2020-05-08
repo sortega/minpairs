@@ -1,5 +1,5 @@
 const MasonPairs = {
-    // /ɪ/ vs /i:/
+    /* #region /ɪ/ vs /i:/ */
     "shit-sheet": {
         left: {
             id: "shit",
@@ -156,8 +156,9 @@ const MasonPairs = {
             phoneme: "i:"
         }
     },
+    /* #endregion */
 
-    // /ɑ/ vs /ʌ/
+    /* #region /ɑ/ vs /ʌ/ */
     "got-gut": {
         left: {
             id: "got",
@@ -326,18 +327,6 @@ const MasonPairs = {
             phoneme: "ʌ"
         }
     },
-    "tall-toll": {
-        left: {
-            id: "tall",
-            label: "tall",
-            phoneme: "ɑ"
-        },
-        right: {
-            id: "toll",
-            label: "toll",
-            phoneme: "ʌ"
-        }
-    },
     "gall-gull": {
         left: {
             id: "gall",
@@ -350,8 +339,24 @@ const MasonPairs = {
             phoneme: "ʌ"
         }
     },
+    /* #endregion */
 
-    // /ɑ/ vs /æ/
+    /* #region  /ɑ/ vs /ʊ/ */
+    "tall-toll": {
+        left: {
+            id: "tall",
+            label: "tall",
+            phoneme: "ɑ"
+        },
+        right: {
+            id: "toll",
+            label: "toll",
+            phoneme: "ʊ"
+        }
+    },
+    /* #endregion */
+
+    /* #region /ɑ/ vs /æ/ */
     "top-tap": {
         left: {
             id: "top",
@@ -496,8 +501,9 @@ const MasonPairs = {
             phoneme: "æ"
         }
     },
+    /* #endregion */
 
-    // /æ/ vs /e/
+    /* #region /æ/ vs /e/ */
     "bat-bet": {
         left: {
             id: "bat",
@@ -594,10 +600,98 @@ const MasonPairs = {
             phoneme: "e"
         }
     },
+    /* #endregion */
+
+    /* #region /ʊ/ vs /u:/ */
+    "stood-stewed": {
+        left: {
+            id: "stood",
+            label: "stood",
+            phoneme: "ʊ"
+        },
+        right: {
+            id: "stewed",
+            label: "stewed",
+            phoneme: "u:"
+        },
+    },
+    "look-luke": {
+        left: {
+            id: "look",
+            label: "look",
+            phoneme: "ʊ"
+        },
+        right: {
+            id: "luke",
+            label: "luke",
+            phoneme: "u:"
+        },
+    },
+    "wood-wooed": {
+        left: {
+            id: "wood",
+            label: "wood",
+            phoneme: "ʊ"
+        },
+        right: {
+            id: "wooed",
+            label: "wooed",
+            phoneme: "u:"
+        },
+    },
+    "pull-pool": {
+        left: {
+            id: "pull",
+            label: "pull",
+            phoneme: "ʊ"
+        },
+        right: {
+            id: "pool",
+            label: "pool",
+            phoneme: "u:"
+        },
+    },
+    "soot-suit": {
+        left: {
+            id: "soot",
+            label: "soot",
+            phoneme: "ʊ"
+        },
+        right: {
+            id: "suit",
+            label: "suit",
+            phoneme: "u:"
+        },
+    },
+    "cookie-kooky": {
+        left: {
+            id: "cookie",
+            label: "cookie",
+            phoneme: "ʊ"
+        },
+        right: {
+            id: "kooky",
+            label: "kooky",
+            phoneme: "u:"
+        },
+    },
+    "toll-tool": {
+        left: {
+            id: "toll",
+            label: "toll",
+            phoneme: "ʊ"
+        },
+        right: {
+            id: "tool",
+            label: "tool",
+            phoneme: "u:"
+        },
+    },
+    /* #endregion */
 }
 
 const OtherPairs = {
-    // /b/ vs /v/
+    /* #region /b/ vs /v/ */
     "sybil-civil": {
         left: {
             id: "sybil",
@@ -658,6 +752,7 @@ const OtherPairs = {
             phoneme: "v"
         }
     },
+    /* #endregion */
 
     // /d/ vs /ð/
     "day-they": { // TODO: Improve audio
@@ -688,7 +783,7 @@ const OtherPairs = {
     },
 
     // /ɑ/ vs /ʌ/
-    
+
     // /ʌ/ vs /æ/
     "tusk-task": {
         left: {
