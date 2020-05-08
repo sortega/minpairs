@@ -3,7 +3,7 @@
 }
 
 #logo {
-  height: 25px;
+  height: 1.3em;
   background-color: white;
   padding: 5px;
   margin-right: 0.5em;
@@ -35,3 +35,23 @@
   height: 4em;
 }
 
+body {
+  background-color: #f0f2f5;
+}
+
+@media (max-height: 400px) {
+  header.ant-layout-header {
+    /* display: none; */
+    font-size: 80%;
+    height: 50px;
+    line-height: 50px;
+  }
+
+  .site-layout {
+    margin-top: 16px;
+  }
+  
+  .ant-layout-footer {
+    padding: 12px;
+  }
+}

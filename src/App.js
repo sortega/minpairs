@@ -138,7 +138,7 @@ class App extends React.Component {
     const { Header, Content, Footer } = Layout;
     return (
       <div className="App">
-        <Layout style={{ height: "100vh" }}>
+        <Layout>
           <Header><h1><img id="logo" src="/minpairs.png" alt="Minpairs logo"/>Minimal Pairs Trainer</h1></Header>
           <Content className="site-layout">
             {
@@ -149,7 +149,7 @@ class App extends React.Component {
                   this.renderSelectTraining())
             }
           </Content>
-          <Footer style={{ textAlign: 'center' }}>Work in progres by sortega</Footer>
+          <Footer style={{ textAlign: 'center' }}>Work in progres by <a href="https://twitter.com/_sortega">sortega</a></Footer>
         </Layout>
       </div>
     );
@@ -169,7 +169,7 @@ class App extends React.Component {
 
     return (<div className="question-card">
       {this.renderSound()}
-      Active pairs: {this.state.activePairs.length}
+      <p>Active pairs: {this.state.activePairs.length}</p>
       <Row gutter={[16, 16]}>
         <Col span={12}>
           <Button className="answer"

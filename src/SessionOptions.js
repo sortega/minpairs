@@ -38,11 +38,13 @@ class SessionOptions extends React.Component {
                 title: 'Phonemes',
                 dataIndex: 'key',
                 key: 'key',
+                align: 'center'
             },
             {
                 title: 'Pairs',
                 dataIndex: 'count',
-                key: 'count'
+                key: 'count',
+                align: 'right'
             }
         ];
 
@@ -62,7 +64,7 @@ class SessionOptions extends React.Component {
             </Row>
 
             <Row gutter={[16, 16]}>
-                <Col offset={4} span={16}>
+                <Col offset={1} span={22}>
                     <Table dataSource={data}
                         columns={columns}
                         rowSelection={{
