@@ -688,6 +688,324 @@ const MasonPairs = {
         },
     },
     /* #endregion */
+
+    /* #region /æ/ vs /oʊ/ */
+    "ram-roam": {
+        left: {
+            id: "ram",
+            label: "ram",
+            phoneme: "æ"
+        },
+        right: {
+            id: "roam",
+            label: "roam",
+            phoneme: "oʊ"
+        },
+    },
+    "bat-boat": {
+        left: {
+            id: "bat2",
+            label: "bat",
+            phoneme: "æ"
+        },
+        right: {
+            id: "boat",
+            label: "boat",
+            phoneme: "oʊ"
+        },
+    },
+    "ham-home": {
+        left: {
+            id: "ham",
+            label: "ham",
+            phoneme: "æ"
+        },
+        right: {
+            id: "home",
+            label: "home",
+            phoneme: "oʊ"
+        },
+    },
+    "sack-soak": {
+        left: {
+            id: "sack2",
+            label: "sack",
+            phoneme: "æ"
+        },
+        right: {
+            id: "soak",
+            label: "soak",
+            phoneme: "oʊ"
+        },
+    },
+    "cat-coat": {
+        left: {
+            id: "cat2",
+            label: "cat",
+            phoneme: "æ"
+        },
+        right: {
+            id: "coat",
+            label: "coat",
+            phoneme: "oʊ"
+        },
+    },
+    /* #endregion */
+
+    /* #region /ɑ/ vs /oʊ/ */
+    "nod-node": {
+        left: {
+            id: "nod",
+            label: "nod",
+            phoneme: "ɑ"
+        },
+        right: {
+            id: "node",
+            label: "node",
+            phoneme: "oʊ"
+        },
+    },
+    "mop-mope": {
+        left: {
+            id: "mop2",
+            label: "mop",
+            phoneme: "ɑ"
+        },
+        right: {
+            id: "mope",
+            label: "mope",
+            phoneme: "oʊ"
+        }
+    },
+    "cod-code": {
+        left: {
+            id: "cod",
+            label: "cod",
+            phoneme: "ɑ"
+        },
+        right: {
+            id: "code",
+            label: "code",
+            phoneme: "oʊ"
+        }
+    },
+    /* #endregion */
+
+    /* #region /ɔ/ vs /oʊ/ */
+    "ball-bowl": {
+        left: {
+            id: "ball",
+            label: "ball",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "bowl",
+            label: "bowl",
+            phoneme: "oʊ"
+        },
+    },
+    "wrought-wrote": {
+        left: {
+            id: "wrought",
+            label: "wrought",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "wrote",
+            label: "wrote",
+            phoneme: "oʊ"
+        },
+    },
+    "raw-row": {
+        left: {
+            id: "raw",
+            label: "raw",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "row",
+            label: "row",
+            phoneme: "oʊ"
+        },
+    },
+    "law-load": {
+        left: {
+            id: "law",
+            label: "law",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "load",
+            label: "load",
+            phoneme: "oʊ"
+        },
+    },
+    "called-cold": {
+        left: {
+            id: "called",
+            label: "called",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "cold",
+            label: "cold",
+            phoneme: "oʊ"
+        },
+    },
+    "ought-oat": {
+        left: {
+            id: "ought",
+            label: "ought",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "oat",
+            label: "oat",
+            phoneme: "oʊ"
+        },
+    },
+    /* #endregion */
+
+    /* #region /æ/ vs /aʊ/ */
+    "sand-sound": {
+        left: {
+            id: "sand",
+            label: "sand",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "sound",
+            label: "sound",
+            phoneme: "aʊ"
+        },
+    },
+    /* #endregion */
+
+    /* #region /ɔ/ vs /aʊ/ */
+    "dawn-down": {
+        left: {
+            id: "dawn",
+            label: "dawn",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "down",
+            label: "down",
+            phoneme: "aʊ"
+        },
+    },
+    "moss-mouse": {
+        left: {
+            id: "moss",
+            label: "moss",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "mouse",
+            label: "mouse",
+            phoneme: "aʊ"
+        },
+    },
+    "brawn-brown": {
+        left: {
+            id: "brawn",
+            label: "brawn",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "brown",
+            label: "brown",
+            phoneme: "aʊ"
+        },
+    },
+    "ought-out": {
+        left: {
+            id: "ought",
+            label: "ought",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "out",
+            label: "out",
+            phoneme: "aʊ"
+        },
+    },
+    "fall-foul": {
+        left: {
+            id: "fall2",
+            label: "fall",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "foul",
+            label: "foul",
+            phoneme: "aʊ"
+        },
+    },    
+    "soar-sour": {
+        left: {
+            id: "soar",
+            label: "soar",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "sour",
+            label: "sour",
+            phoneme: "aʊ"
+        },
+    },
+    /* #endregion */
+
+    /* #region /ɑ/ vs /aʊ/ */
+    "rot-route": {
+        left: {
+            id: "rot2",
+            label: "rot",
+            phoneme: "ɑ"
+        },
+        right: {
+            id: "route",
+            label: "route",
+            phoneme: "aʊ"
+        },
+    },
+    "pond-pound": {
+        left: {
+            id: "pond",
+            label: "pond",
+            phoneme: "ɑ"
+        },
+        right: {
+            id: "pound",
+            label: "pound",
+            phoneme: "aʊ"
+        },
+    },
+    "spot-spout": {
+        left: {
+            id: "spot",
+            label: "spot",
+            phoneme: "ɑ"
+        },
+        right: {
+            id: "spout",
+            label: "spout",
+            phoneme: "aʊ"
+        },
+    },
+    "shot-shout": {
+        left: {
+            id: "shot2",
+            label: "shot",
+            phoneme: "ɑ"
+        },
+        right: {
+            id: "shout",
+            label: "shout",
+            phoneme: "aʊ"
+        },
+    },
+    /* #endregion */
 }
 
 const OtherPairs = {
