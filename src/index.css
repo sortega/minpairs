@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.ant-checkbox-group-item {
+  width: 5em;
+  text-align: left;
+  margin-right: 0 !important;
+}
