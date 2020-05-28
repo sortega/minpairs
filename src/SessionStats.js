@@ -35,7 +35,7 @@ function SessionStats(props) {
         <Table
             dataSource={stats}
             columns={columns}
-            sortedInfo={{ order: "ascend", columnKey: "label" }}
+            sortedInfo={{ order: "descend", columnKey: "accuracy" }}
         />
 
         <Button type="primary" onClick={props.onDismiss}>
