@@ -1006,6 +1006,162 @@ const MasonPairs = {
         },
     },
     /* #endregion */
+
+    /* #region /ɔ/ vs /aɪ/ */
+    "mall-mile": {
+        left: {
+            id: "mall",
+            label: "mall",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "mile",
+            label: "mile",
+            phoneme: "aɪ"
+        },
+    },
+    "fought-fight": {
+        left: {
+            id: "fought",
+            label: "fought",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "fight",
+            label: "fight",
+            phoneme: "aɪ"
+        },
+    },
+    "wrought-right": {
+        left: {
+            id: "wrought",
+            label: "wrought",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "right",
+            label: "right",
+            phoneme: "aɪ"
+        },
+    },
+    /* #endregion */
+
+    /* #region /ɪ/ vs /aɪ/ */
+    "heat-height": {
+        left: {
+            id: "heat",
+            label: "heat",
+            phoneme: "ɪ"
+        },
+        right: {
+            id: "height",
+            label: "height",
+            phoneme: "aɪ"
+        },
+    },
+    /* #endregion */
+
+    /* #region /i:/ vs /aɪ/ */
+    "ream-rhyme": {
+        left: {
+            id: "ream",
+            label: "ream",
+            phoneme: "i:"
+        },
+        right: {
+            id: "rhyme",
+            label: "rhyme",
+            phoneme: "aɪ"
+        },
+    },
+    "lead-lied": {
+        left: {
+            id: "to_lead",
+            label: "lead",
+            phoneme: "i:"
+        },
+        right: {
+            id: "lied",
+            label: "lied",
+            phoneme: "aɪ"
+        },
+    },
+    "flea-flye": {
+        left: {
+            id: "flea",
+            label: "flea",
+            phoneme: "i:"
+        },
+        right: {
+            id: "flye",
+            label: "flye",
+            phoneme: "aɪ"
+        },
+    },
+    "team-time": {
+        left: {
+            id: "team",
+            label: "team",
+            phoneme: "i:"
+        },
+        right: {
+            id: "time",
+            label: "time",
+            phoneme: "aɪ"
+        },
+    },
+    "read-ride": {
+        left: {
+            id: "read",
+            label: "read",
+            phoneme: "i:"
+        },
+        right: {
+            id: "ride",
+            label: "ride",
+            phoneme: "aɪ"
+        },
+    },
+    "creed-cried": {
+        left: {
+            id: "creed",
+            label: "creed",
+            phoneme: "i:"
+        },
+        right: {
+            id: "cried",
+            label: "cried",
+            phoneme: "aɪ"
+        },
+    },
+    /* #endregion */
+
+    /* #region /æ/ vs /aɪ/ */
+    "sat-sight": {
+        left: {
+            id: "sat",
+            label: "sat",
+            phoneme: "æ"
+        },
+        right: {
+            id: "sight",
+            label: "sight",
+            phoneme: "aɪ"
+        },
+    },
+    "sad-sighed": {
+        left: {
+            id: "sad",
+            label: "sad",
+            phoneme: "æ"
+        },
+        right: {
+            id: "sighed",
+            label: "sighed",
+            phoneme: "aɪ"
+        },
+    },
+    /* #endregion */
 }
 
 const OtherPairs = {
