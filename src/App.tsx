@@ -1,35 +1,45 @@
 import React from 'react';
-import { Button, Col, Layout, message, Row } from 'antd';
+import { Button, Col, Layout, Row } from 'antd';
 import Sound from 'react-sound';
 
 import SessionStats from './SessionStats';
 import SessionOptions from './SessionOptions';
 import Pairs from './pairs';
+import { MinimalPairs, Side, QuestionOutcome, Question } from './model';
 
 import 'antd/dist/antd.css';
 import './App.css';
 
-function randomSubset(array, size) {
+function randomSubset<T>(array: T[], size: number) {
   return array.map(value => ({ value, score: Math.random() }))
-    .sort((a, b) => a.score <= b.score)
+    .sort((a, b) => a.score - b.score)
     .slice(0, size).map(pair => pair.value);
 }
 
-class App extends React.Component {
-  state = {
+interface AppState {
+  pairs: MinimalPairs,
+  activePairs: string[],
+  questionOutcomes?: QuestionOutcome[],
+  currentQuestion?: Question,
+  sound?: Side,
+  soundQueue: Side[]
+}
+
+class App extends React.Component<{}, AppState> {
+  state: AppState = {
     pairs: Pairs,
     activePairs: [],
-    questionOutcomes: null,
-    currentQuestion: null,
-    sound: null,
+    questionOutcomes: undefined,
+    currentQuestion: undefined,
+    sound: undefined,
     soundQueue: []
   };
 
-  startTraining(options) {
+  startTraining(options: { pairsToTrain: number, phonemePairIds: string[] }) {
     this.setState(state => {
       return {
         ...state,
-        activePairs: randomSubset(options.phonemePairs, options.pairsToTrain),
+        activePairs: randomSubset(options.phonemePairIds, options.pairsToTrain),
         questionOutcomes: []
       };
     });
@@ -37,7 +47,7 @@ class App extends React.Component {
   }
 
   nextQuestion() {
-    const correctAnswer = (Math.random() < 0.5) ? "left" : "right";
+    const correctAnswer = (Math.random() < 0.5) ? Side.Left : Side.Right;
     this.setState(state => {
       const { activePairs } = state;
       const pairId = activePairs[Math.floor(Math.random() * activePairs.length)]
@@ -45,33 +55,39 @@ class App extends React.Component {
         currentQuestion: {
           pairId,
           correctAnswer,
-          actualAnswer: null,
+          actualAnswer: undefined,
         },
-        sound: null,
+        sound: undefined,
         soundQueue: []
       }
     });
     this.play(correctAnswer);
   }
 
-  doAnswer(actualAnswer) {
+  doAnswer(actualAnswer: Side) {
     this.setState(state => {
-      const currentQuestion = { ...state.currentQuestion, actualAnswer };
-      const questionOutcomes = [...state.questionOutcomes, currentQuestion];
-      const doneWithPair = this.areWeDoneWithPair(state.currentQuestion.pairId, questionOutcomes);
+      if (!state.currentQuestion) {
+        return state; // This guard should not be needed
+      }
+      const currentQuestion: QuestionOutcome = { ...state.currentQuestion, actualAnswer };
+      const questionOutcomes = state.questionOutcomes
+        ? [...state.questionOutcomes, currentQuestion]
+        : [currentQuestion];
+      // We should not guard on state.currentQuestion
+      const doneWithPair = state.currentQuestion && this.areWeDoneWithPair(state.currentQuestion.pairId, questionOutcomes);
       return {
         ...state,
-        activePairs: doneWithPair ? state.activePairs.filter(pairId => pairId !== state.currentQuestion.pairId) : state.activePairs,
+        activePairs: doneWithPair ? state.activePairs.filter(pairId => !state.currentQuestion || pairId !== state.currentQuestion.pairId) : state.activePairs,
         currentQuestion,
-        sound: null,
+        sound: undefined,
         questionOutcomes
       };
     })
     this.play(actualAnswer);
-    this.play(actualAnswer === "right" ? "left" : "right");
+    this.play(actualAnswer === Side.Right ? Side.Left : Side.Right);
   }
 
-  areWeDoneWithPair(pairId, questionOutcomes) {
+  areWeDoneWithPair(pairId: string, questionOutcomes: QuestionOutcome[]) {
     const outcomes = questionOutcomes
       .filter(outcome => outcome.pairId === pairId)
       .map(outcome => ({
@@ -94,7 +110,7 @@ class App extends React.Component {
     return streakSize >= 2;
   }
 
-  playNextSound = state => {
+  playNextSound = (state: AppState) => {
     if (state.sound || state.soundQueue.length === 0) {
       return state;
     }
@@ -104,33 +120,28 @@ class App extends React.Component {
 
   onFinishSound() {
     this.setState(state => {
-      return this.playNextSound({ ...state, sound: null });
+      return this.playNextSound({ ...state, sound: undefined });
     });
   }
 
-  play(side) {
+  play(side: Side) {
     this.setState(state => {
       return this.playNextSound({ ...state, soundQueue: [...state.soundQueue, side] });
     })
   }
-
-  handleChange = date => {
-    message.info(`Selected Date: ${date ? date.format('YYYY-MM-DD') : 'None'}`);
-    this.setState({ date });
-  };
 
   render() {
     const { Header, Content, Footer } = Layout;
     return (
       <div className="App">
         <Layout>
-          <Header><h1><img id="logo" src="/minpairs.png" alt="Minpairs logo"/>Minimal Pairs Trainer</h1></Header>
+          <Header><h1><img id="logo" src="/minpairs.png" alt="Minpairs logo" />Minimal Pairs Trainer</h1></Header>
           <Content className="site-layout">
             {
               this.state.activePairs.length > 0 ?
                 this.renderQuestion() :
                 (this.state.questionOutcomes ?
-                  this.renderStats() :
+                  this.renderStats(this.state.questionOutcomes) :
                   this.renderSelectTraining())
             }
           </Content>
@@ -149,6 +160,9 @@ class App extends React.Component {
 
   renderQuestion() {
     const { sound, pairs, currentQuestion } = this.state;
+    if (!currentQuestion) {
+      return <></>;
+    }
     const { pairId, correctAnswer, actualAnswer } = currentQuestion;
     const pair = pairs[pairId];
 
@@ -158,19 +172,19 @@ class App extends React.Component {
       <Row gutter={[16, 16]}>
         <Col span={12}>
           <Button className="answer"
-            type={actualAnswer && (correctAnswer === "left") ? "primary" : "default"}
-            onClick={(actualAnswer ? this.play : this.doAnswer).bind(this, "left")}
-            loading={!!(actualAnswer && sound === "left")}
-            danger={actualAnswer === "left" && actualAnswer !== correctAnswer}>
+            type={actualAnswer && (correctAnswer === Side.Left) ? "primary" : "default"}
+            onClick={(actualAnswer ? this.play : this.doAnswer).bind(this, Side.Left)}
+            loading={!!(actualAnswer && sound === Side.Left)}
+            danger={actualAnswer === Side.Left && actualAnswer !== correctAnswer}>
             {pair.left.label} /{pair.left.phoneme}/
           </Button>
         </Col>
         <Col span={12}>
           <Button className="answer"
-            type={actualAnswer && (correctAnswer === "right") ? "primary" : "default"}
-            onClick={(actualAnswer ? this.play : this.doAnswer).bind(this, "right")}
-            loading={!!(actualAnswer && sound === "right")}
-            danger={actualAnswer === "right" && actualAnswer !== correctAnswer}>
+            type={actualAnswer && (correctAnswer === Side.Right) ? "primary" : "default"}
+            onClick={(actualAnswer ? this.play : this.doAnswer).bind(this, Side.Right)}
+            loading={!!(actualAnswer && sound === Side.Right)}
+            danger={actualAnswer === Side.Right && actualAnswer !== correctAnswer}>
             {pair.right.label} /{pair.right.phoneme}/
           </Button>
         </Col>
@@ -186,7 +200,7 @@ class App extends React.Component {
                 </Button>
               : <Button
                 className="action"
-                onClick={this.play.bind(this, [correctAnswer])}
+                onClick={this.play.bind(this, correctAnswer)}
                 loading={!!sound}>
                 Replay
               </Button>
@@ -198,21 +212,24 @@ class App extends React.Component {
 
   renderSound() {
     const { sound, pairs, currentQuestion } = this.state;
+    if (!currentQuestion) {
+      return <></>;
+    }
     const pairId = currentQuestion.pairId;
     const soundId = sound ? pairs[pairId][sound].id : null;
     const soundUrl = `/sounds/${soundId}.mp3`;
     return (<Sound
       url={soundUrl}
-      playStatus={soundId ? Sound.status.PLAYING : Sound.status.STOPPED}
+      playStatus={soundId ? 'PLAYING' : 'STOPPED'}
       onFinishedPlaying={this.onFinishSound.bind(this)}
     />);
   }
 
-  renderStats() {
+  renderStats(questionOutcomes: QuestionOutcome[]) {
     return (<SessionStats
       pairs={this.state.pairs}
-      outcomes={this.state.questionOutcomes}
-      onDismiss={() => this.setState({ questionOutcomes: null })} />);
+      outcomes={questionOutcomes}
+      onDismiss={() => this.setState({ questionOutcomes: undefined })} />);
   }
 }
 

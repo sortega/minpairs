@@ -1,4 +1,6 @@
-const MasonPairs = {
+import { MinimalPairs } from './model';
+
+const MasonPairs: MinimalPairs = {
     /* #region /ɪ/ vs /i:/ */
     "shit-sheet": {
         left: {
@@ -941,7 +943,7 @@ const MasonPairs = {
             label: "foul",
             phoneme: "aʊ"
         },
-    },    
+    },
     "soar-sour": {
         left: {
             id: "soar",
@@ -1164,7 +1166,7 @@ const MasonPairs = {
     /* #endregion */
 }
 
-const OtherPairs = {
+const OtherPairs: MinimalPairs = {
     /* #region /b/ vs /v/ */
     "sybil-civil": {
         left: {
@@ -1299,7 +1301,7 @@ const OtherPairs = {
     },
 }
 
-const Pairs = {
+const Pairs: MinimalPairs = {
     ...MasonPairs,
     ...OtherPairs
 };

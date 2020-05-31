@@ -1,7 +1,18 @@
 import React from 'react';
 import { Button, Col, InputNumber, Row, Checkbox } from 'antd';
+import { MinimalPairs } from './model';
 
-class SessionOptions extends React.Component {
+interface SessionOptionsProps {
+    pairs: MinimalPairs,
+    onComplete: (opts: { pairsToTrain: number, phonemePairIds: string[] }) => void,
+}
+
+interface SessionOptionsState {
+    pairsToTrain: number,
+    selectedPhonemes: string[],
+}
+
+class SessionOptions extends React.Component<SessionOptionsProps, SessionOptionsState> {
     state = {
         pairsToTrain: Object.keys(this.props.pairs).length,
         selectedPhonemes: this.uniquePhonemes().map(pair => pair.phoneme),
@@ -9,11 +20,11 @@ class SessionOptions extends React.Component {
 
     onComplete() {
         const { pairsToTrain, selectedPhonemes } = this.state;
-        const phonemePairs = this.filterPairsBySelectedPhonemes(selectedPhonemes);
-        this.props.onComplete({ pairsToTrain, phonemePairs });
+        const phonemePairIds = this.filterPairIdsBySelectedPhonemes(selectedPhonemes);
+        this.props.onComplete({ pairsToTrain, phonemePairIds });
     }
 
-    filterPairsBySelectedPhonemes(selectedPhonemes) {
+    filterPairIdsBySelectedPhonemes(selectedPhonemes: string[]): string[] {
         return Object.entries(this.props.pairs)
             .filter(entry => {
                 const pair = entry[1];
@@ -23,8 +34,8 @@ class SessionOptions extends React.Component {
             .map(entry => entry[0]);
     }
 
-    uniquePhonemes() { // [{ phoneme: String, count: Int }]
-        const deduped = {};
+    uniquePhonemes(): Array<{ phoneme: string, count: number }> {
+        const deduped: { [key: string]: { phoneme: string, count: number } } = {};
         Object.values(this.props.pairs).forEach(pair => {
             const left = pair.left.phoneme;
             const right = pair.right.phoneme;
@@ -47,7 +58,7 @@ class SessionOptions extends React.Component {
             })
         );
         options.sort((l, r) => l.value.localeCompare(r.value));
-        const maxPairs = this.filterPairsBySelectedPhonemes(this.state.selectedPhonemes).length;
+        const maxPairs = this.filterPairIdsBySelectedPhonemes(this.state.selectedPhonemes).length;
 
         return <>
             <Row gutter={[16, 16]} style={{ textAlign: "left" }}>
@@ -58,11 +69,12 @@ class SessionOptions extends React.Component {
                     <InputNumber
                         min={1}
                         max={maxPairs}
-                        style={{width: "4em"}}
+                        style={{ width: "4em" }}
                         value={this.state.pairsToTrain}
-                        onChange={value => this.setState({ pairsToTrain: value })}
+                        // TODO: handle undefined for this handler
+                        onChange={value => this.setState({ pairsToTrain: value || maxPairs })}
                     />
-                    &nbsp; 
+                    &nbsp;
                     / {maxPairs}
                 </Col>
             </Row>
@@ -72,7 +84,11 @@ class SessionOptions extends React.Component {
                     <Checkbox.Group
                         options={options}
                         value={this.state.selectedPhonemes}
-                        onChange={selectedPhonemes => this.setState({ selectedPhonemes })}
+                        onChange={checkboxValues => 
+                            this.setState({ 
+                                selectedPhonemes: checkboxValues.flatMap(value => typeof value === "string" ? [value] : []) 
+                            })
+                        }
                     />
                 </Col>
             </Row>

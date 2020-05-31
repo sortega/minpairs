@@ -1,8 +1,15 @@
 import React from 'react';
 import { Button, Table } from 'antd';
+import { MinimalPairs, QuestionOutcome } from './model';
+import { ColumnsType } from 'antd/lib/table';
 
-// pairs, outcomes, onDismiss
-function SessionStats(props) {
+interface SessionStatsProps {
+    outcomes: QuestionOutcome[],
+    pairs: MinimalPairs
+    onDismiss: () => void
+}
+
+function SessionStats(props: SessionStatsProps) {
     const outcomeSummary = summarizeOutcomes(props);
 
     const stats = Object.keys(outcomeSummary).map(label => {
@@ -12,7 +19,7 @@ function SessionStats(props) {
         return ({ label, reps, accuracy });
     });
 
-    const columns = [
+    const columns: ColumnsType<object> = [
         {
             title: 'Pair',
             dataIndex: 'label',
@@ -20,6 +27,7 @@ function SessionStats(props) {
         },
         {
             title: 'Repetitions',
+            sorter: true,
             dataIndex: 'reps',
             key: 'reps',
         },
@@ -27,26 +35,28 @@ function SessionStats(props) {
             title: 'Accuracy',
             dataIndex: 'accuracy',
             key: 'accuracy',
-            render: accuracy => (accuracy * 100).toFixed(1) + "%"
+            defaultSortOrder: 'ascend',
+            sortDirections: ['ascend', 'descend'],
+            sorter: true,
+            render: (accuracy: number) => (accuracy * 100).toFixed(1) + "%",
         },
     ];
 
-    return <>
+    return (<>
         <Table
             dataSource={stats}
             columns={columns}
-            sortedInfo={{ order: "descend", columnKey: "accuracy" }}
+            // sortedInfo={{ order: "descend", columnKey: "accuracy" }}
         />
 
         <Button type="primary" onClick={props.onDismiss}>
             Dismiss
         </Button>
-    </>;
+    </>);
 }
 
-
-function summarizeOutcomes(props) {
-    const outcomeSummary = {};
+function summarizeOutcomes(props: SessionStatsProps) {
+    const outcomeSummary: { [key: string]: { successes: number, failures: number } } = {};
     props.outcomes.forEach(outcome => {
         const pair = props.pairs[outcome.pairId];
         const label = `/${pair.left.phoneme}/ vs /${pair.right.phoneme}/`;
