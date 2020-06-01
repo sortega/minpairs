@@ -885,7 +885,7 @@ const MasonPairs: MinimalPairs = {
         left: {
             id: "sand",
             label: "sand",
-            phoneme: "ɔ"
+            phoneme: "æ"
         },
         right: {
             id: "sound",
