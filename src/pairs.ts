@@ -185,18 +185,6 @@ const MasonPairs: MinimalPairs = {
             phoneme: "ʌ"
         }
     },
-    "bought-but": {
-        left: {
-            id: "bought",
-            label: "bought",
-            phoneme: "ɑ"
-        },
-        right: {
-            id: "but",
-            label: "but",
-            phoneme: "ʌ"
-        }
-    },
     "watt-what": {
         left: {
             id: "watt",
@@ -218,18 +206,6 @@ const MasonPairs: MinimalPairs = {
         right: {
             id: "suck",
             label: "suck",
-            phoneme: "ʌ"
-        }
-    },
-    "hall-hull": {
-        left: {
-            id: "hall",
-            label: "hall",
-            phoneme: "ɑ"
-        },
-        right: {
-            id: "hull",
-            label: "hull",
             phoneme: "ʌ"
         }
     },
@@ -257,30 +233,6 @@ const MasonPairs: MinimalPairs = {
             phoneme: "ʌ"
         }
     },
-    "caught-cut": {
-        left: {
-            id: "caught",
-            label: "caught",
-            phoneme: "ɑ"
-        },
-        right: {
-            id: "cut",
-            label: "cut",
-            phoneme: "ʌ"
-        }
-    },
-    "daughter-dutter": {
-        left: {
-            id: "daughter",
-            label: "daughter",
-            phoneme: "ɑ"
-        },
-        right: {
-            id: "dutter",
-            label: "dutter",
-            phoneme: "ʌ"
-        }
-    },
     "rob-rub": {
         left: {
             id: "rob",
@@ -290,18 +242,6 @@ const MasonPairs: MinimalPairs = {
         right: {
             id: "rub",
             label: "rub",
-            phoneme: "ʌ"
-        }
-    },
-    "fall-full": {
-        left: {
-            id: "fall",
-            label: "fall",
-            phoneme: "ɑ"
-        },
-        right: {
-            id: "full",
-            label: "full",
             phoneme: "ʌ"
         }
     },
@@ -329,33 +269,6 @@ const MasonPairs: MinimalPairs = {
             phoneme: "ʌ"
         }
     },
-    "gall-gull": {
-        left: {
-            id: "gall",
-            label: "gall",
-            phoneme: "ɑ"
-        },
-        right: {
-            id: "gull",
-            label: "gull",
-            phoneme: "ʌ"
-        }
-    },
-    /* #endregion */
-
-    /* #region  /ɑ/ vs /ʊ/ */
-    "tall-toll": {
-        left: {
-            id: "tall",
-            label: "tall",
-            phoneme: "ɑ"
-        },
-        right: {
-            id: "toll",
-            label: "toll",
-            phoneme: "ʊ"
-        }
-    },
     /* #endregion */
 
     /* #region /ɑ/ vs /æ/ */
@@ -373,7 +286,7 @@ const MasonPairs: MinimalPairs = {
     },
     "hot-hat": {
         left: {
-            id: "hot2",
+            id: "hot",
             label: "hot",
             phoneme: "ɑ"
         },
@@ -445,7 +358,7 @@ const MasonPairs: MinimalPairs = {
     },
     "sock-sack": {
         left: {
-            id: "sock2",
+            id: "sock",
             label: "sock",
             phoneme: "ɑ"
         },
@@ -469,7 +382,7 @@ const MasonPairs: MinimalPairs = {
     },
     "pot-pat": {
         left: {
-            id: "pot2",
+            id: "pot",
             label: "pot",
             phoneme: "ɑ"
         },
@@ -793,6 +706,93 @@ const MasonPairs: MinimalPairs = {
     },
     /* #endregion */
 
+    /* #region /ɔ/ vs /ʌ/ */
+    "bought-but": {
+        left: {
+            id: "bought",
+            label: "bought",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "but",
+            label: "but",
+            phoneme: "ʌ"
+        }
+    },
+    "hall-hull": {
+        left: {
+            id: "hall",
+            label: "hall",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "hull",
+            label: "hull",
+            phoneme: "ʌ"
+        }
+    },
+    "caught-cut": {
+        left: {
+            id: "caught",
+            label: "caught",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "cut",
+            label: "cut",
+            phoneme: "ʌ"
+        }
+    },
+    "daughter-dutter": {
+        left: {
+            id: "daughter",
+            label: "daughter",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "dutter",
+            label: "dutter",
+            phoneme: "ʌ"
+        }
+    },
+    "fall-full": {
+        left: {
+            id: "fall",
+            label: "fall",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "full",
+            label: "full",
+            phoneme: "ʌ"
+        }
+    },
+    "mall-mull": {
+        left: {
+            id: "mall",
+            label: "mall",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "mull",
+            label: "mull",
+            phoneme: "ʌ"
+        },
+    },
+    "gall-gull": {
+        left: {
+            id: "gall",
+            label: "gall",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "gull",
+            label: "gull",
+            phoneme: "ʌ"
+        }
+    },
+    /* #endregion */
+
     /* #region /ɔ/ vs /oʊ/ */
     "ball-bowl": {
         left: {
@@ -866,6 +866,18 @@ const MasonPairs: MinimalPairs = {
             phoneme: "oʊ"
         },
     },
+    "tall-toll": {
+        left: {
+            id: "tall",
+            label: "tall",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "toll",
+            label: "toll",
+            phoneme: "oʊ"
+        }
+    },
     /* #endregion */
 
     /* #region /æ/ vs /aʊ/ */
@@ -934,7 +946,7 @@ const MasonPairs: MinimalPairs = {
     },
     "fall-foul": {
         left: {
-            id: "fall2",
+            id: "fall",
             label: "fall",
             phoneme: "ɔ"
         },
@@ -961,7 +973,7 @@ const MasonPairs: MinimalPairs = {
     /* #region /ɑ/ vs /aʊ/ */
     "rot-route": {
         left: {
-            id: "rot2",
+            id: "rot",
             label: "rot",
             phoneme: "ɑ"
         },
@@ -997,7 +1009,7 @@ const MasonPairs: MinimalPairs = {
     },
     "shot-shout": {
         left: {
-            id: "shot2",
+            id: "shot",
             label: "shot",
             phoneme: "ɑ"
         },
