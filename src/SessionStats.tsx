@@ -9,17 +9,21 @@ interface SessionStatsProps {
     onDismiss: () => void
 }
 
+interface Stat {
+    label: string,
+    reps: number,
+    accuracy: number,
+}
+
+interface SessionStasState {
+    stats: Stat[],
+}
+
 function SessionStats(props: SessionStatsProps) {
-    const outcomeSummary = summarizeOutcomes(props);
 
-    const stats = Object.keys(outcomeSummary).map(label => {
-        const { successes, failures } = outcomeSummary[label];
-        const reps = successes + failures;
-        const accuracy = successes / reps;
-        return ({ label, reps, accuracy });
-    });
+    const stats = toStats(summarizeOutcomes(props));
 
-    const columns: ColumnsType<object> = [
+    const columns: ColumnsType<Stat> = [
         {
             title: 'Pair',
             dataIndex: 'label',
@@ -27,31 +31,23 @@ function SessionStats(props: SessionStatsProps) {
         },
         {
             title: 'Repetitions',
-            sorter: true,
+            sorter: (a, b) => a.reps - b.reps,
             dataIndex: 'reps',
             key: 'reps',
         },
         {
             title: 'Accuracy',
-            dataIndex: 'accuracy',
             key: 'accuracy',
+            dataIndex: 'accuracy',
             defaultSortOrder: 'ascend',
-            sortDirections: ['ascend', 'descend'],
-            sorter: true,
+            sorter: (a, b) => a.accuracy - b.accuracy,
             render: (accuracy: number) => (accuracy * 100).toFixed(1) + "%",
         },
     ];
 
     return (<>
-        <Table
-            dataSource={stats}
-            columns={columns}
-            // sortedInfo={{ order: "descend", columnKey: "accuracy" }}
-        />
-
-        <Button type="primary" onClick={props.onDismiss}>
-            Dismiss
-        </Button>
+        <Table dataSource={stats} columns={columns} />
+        <Button type="primary" onClick={props.onDismiss}>Dismiss</Button>
     </>);
 }
 
@@ -71,6 +67,16 @@ function summarizeOutcomes(props: SessionStatsProps) {
         }
     });
     return outcomeSummary;
+}
+
+function toStats(outcomeSummary: { [key: string]: { successes: number, failures: number } }): Stat[] {
+    return Object.keys(outcomeSummary)
+        .map(label => {
+            const { successes, failures } = outcomeSummary[label];
+            const reps = successes + failures;
+            const accuracy = successes / reps;
+            return ({ label, reps, accuracy });
+        });
 }
 
 export default SessionStats;
