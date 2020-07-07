@@ -5,7 +5,7 @@ import Sound from 'react-sound';
 import SessionStats from './SessionStats';
 import SessionOptions from './SessionOptions';
 import Pairs from './pairs';
-import { MinimalPairs, Side, QuestionOutcome, Question } from './model';
+import { Side, QuestionOutcome, Question } from './model';
 
 import 'antd/dist/antd.css';
 import './App.css';
@@ -16,32 +16,43 @@ function randomSubset<T>(array: T[], size: number) {
     .slice(0, size).map(pair => pair.value);
 }
 
-interface AppState {
-  pairs: MinimalPairs,
-  activePairs: string[],
-  questionOutcomes?: QuestionOutcome[],
-  currentQuestion?: Question,
-  sound?: Side,
-  soundQueue: Side[]
+enum Stage {
+  Configuring,
+  Quizzing,
+  Debriefing
 }
+
+type ConfiguringState = {
+  stage: Stage.Configuring
+}
+
+type QuizzingState = {
+  stage: Stage.Quizzing,
+  activePairs: string[],
+  currentQuestion: Question,
+  questionOutcomes: QuestionOutcome[],
+  sound?: Side,
+  soundQueue: Side[],
+}
+
+type DebriefingState = {
+  stage: Stage.Debriefing,
+  questionOutcomes: QuestionOutcome[],
+}
+
+type AppState = ConfiguringState | QuizzingState | DebriefingState;
 
 class App extends React.Component<{}, AppState> {
   state: AppState = {
-    pairs: Pairs,
-    activePairs: [],
-    questionOutcomes: undefined,
-    currentQuestion: undefined,
-    sound: undefined,
-    soundQueue: []
+    stage: Stage.Configuring
   };
 
   startTraining(options: { pairsToTrain: number, phonemePairIds: string[] }) {
-    this.setState(state => {
-      return {
-        ...state,
-        activePairs: randomSubset(options.phonemePairIds, options.pairsToTrain),
-        questionOutcomes: []
-      };
+    this.setState({
+      stage: Stage.Quizzing,
+      activePairs: randomSubset(options.phonemePairIds, options.pairsToTrain),
+      questionOutcomes: [],
+      soundQueue: []
     });
     this.nextQuestion();
   }
@@ -49,39 +60,44 @@ class App extends React.Component<{}, AppState> {
   nextQuestion() {
     const correctAnswer = (Math.random() < 0.5) ? Side.Left : Side.Right;
     this.setState(state => {
+      if (state.stage !== Stage.Quizzing) {
+        return state; // This guard should not be needed
+      }
       const { activePairs } = state;
       const pairId = activePairs[Math.floor(Math.random() * activePairs.length)]
-      return {
-        currentQuestion: {
-          pairId,
-          correctAnswer,
-          actualAnswer: undefined,
-        },
+      const currentQuestion = {
+        pairId,
+        correctAnswer,
+        actualAnswer: undefined,
+      };
+      return ({
+        ...state,
+        currentQuestion,
         sound: undefined,
         soundQueue: []
-      }
+      });
     });
     this.play(correctAnswer);
   }
 
   doAnswer(actualAnswer: Side) {
     this.setState(state => {
-      if (!state.currentQuestion) {
+      if (state.stage !== Stage.Quizzing) {
         return state; // This guard should not be needed
       }
-      const currentQuestion: QuestionOutcome = { ...state.currentQuestion, actualAnswer };
-      const questionOutcomes = state.questionOutcomes
-        ? [...state.questionOutcomes, currentQuestion]
-        : [currentQuestion];
-      // We should not guard on state.currentQuestion
-      const doneWithPair = state.currentQuestion && this.areWeDoneWithPair(state.currentQuestion.pairId, questionOutcomes);
-      return {
+      const currentQuestion = { ...state.currentQuestion, actualAnswer };
+      const questionOutcomes = [...state.questionOutcomes, currentQuestion];
+      const doneWithPair = this.areWeDoneWithPair(state.currentQuestion.pairId, questionOutcomes);
+      const activePairs = doneWithPair 
+        ? state.activePairs.filter(pairId => !state.currentQuestion || pairId !== state.currentQuestion.pairId) 
+        : state.activePairs;
+      return (activePairs.length > 0) ? {
         ...state,
-        activePairs: doneWithPair ? state.activePairs.filter(pairId => !state.currentQuestion || pairId !== state.currentQuestion.pairId) : state.activePairs,
+        activePairs,
         currentQuestion,
         sound: undefined,
         questionOutcomes
-      };
+      } : { stage: Stage.Debriefing };
     })
     this.play(actualAnswer);
     this.play(actualAnswer === Side.Right ? Side.Left : Side.Right);
@@ -111,6 +127,9 @@ class App extends React.Component<{}, AppState> {
   }
 
   playNextSound = (state: AppState) => {
+    if (state.stage !== Stage.Quizzing) {
+      return state; // This guard should not be needed
+    }
     if (state.sound || state.soundQueue.length === 0) {
       return state;
     }
@@ -120,12 +139,18 @@ class App extends React.Component<{}, AppState> {
 
   onFinishSound() {
     this.setState(state => {
+      if (state.stage !== Stage.Quizzing) {
+        return state; // This guard should not be needed
+      }
       return this.playNextSound({ ...state, sound: undefined });
     });
   }
 
   play(side: Side) {
     this.setState(state => {
+      if (state.stage !== Stage.Quizzing) {
+        return state; // This guard should not be needed
+      }
       return this.playNextSound({ ...state, soundQueue: [...state.soundQueue, side] });
     })
   }
@@ -138,9 +163,9 @@ class App extends React.Component<{}, AppState> {
           <Header><h1><img id="logo" src="/minpairs.png" alt="Minpairs logo" />Minimal Pairs Trainer</h1></Header>
           <Content className="site-layout">
             {
-              this.state.activePairs.length > 0 ?
-                this.renderQuestion() :
-                (this.state.questionOutcomes ?
+              (this.state.stage === Stage.Quizzing) ?
+              this.renderQuestion(this.state) :
+                ((this.state.stage === Stage.Debriefing) ?
                   this.renderStats(this.state.questionOutcomes) :
                   this.renderSelectTraining())
             }
@@ -153,22 +178,22 @@ class App extends React.Component<{}, AppState> {
 
   renderSelectTraining() {
     return (<SessionOptions
-      pairs={this.state.pairs}
+      pairs={Pairs}
       onComplete={this.startTraining.bind(this)}
     />);
   }
 
-  renderQuestion() {
-    const { sound, pairs, currentQuestion } = this.state;
+  renderQuestion(state: QuizzingState) {
+    const { sound, currentQuestion } = state;
     if (!currentQuestion) {
       return <></>;
     }
     const { pairId, correctAnswer, actualAnswer } = currentQuestion;
-    const pair = pairs[pairId];
+    const pair = Pairs[pairId];
 
     return (<div className="question-card">
-      {this.renderSound()}
-      <p>Active pairs: {this.state.activePairs.length}</p>
+      {this.renderSound(state)}
+      <p>Active pairs: {state.activePairs.length}</p>
       <Row gutter={[16, 16]}>
         <Col span={12}>
           <Button className="answer"
@@ -210,13 +235,13 @@ class App extends React.Component<{}, AppState> {
     </div>);
   }
 
-  renderSound() {
-    const { sound, pairs, currentQuestion } = this.state;
+  renderSound(state: QuizzingState) {
+    const { sound, currentQuestion } = state;
     if (!currentQuestion) {
       return <></>;
     }
     const pairId = currentQuestion.pairId;
-    const soundId = sound ? pairs[pairId][sound].id : null;
+    const soundId = sound ? Pairs[pairId][sound].id : null;
     const soundUrl = `/sounds/${soundId}.mp3`;
     return (<Sound
       url={soundUrl}
@@ -227,9 +252,9 @@ class App extends React.Component<{}, AppState> {
 
   renderStats(questionOutcomes: QuestionOutcome[]) {
     return (<SessionStats
-      pairs={this.state.pairs}
+      pairs={Pairs}
       outcomes={questionOutcomes}
-      onDismiss={() => this.setState({ questionOutcomes: undefined })} />);
+      onDismiss={() => this.setState({ stage: Stage.Configuring })} />);
   }
 }
 
