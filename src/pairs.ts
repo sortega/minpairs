@@ -755,18 +755,6 @@ const MasonPairs: MinimalPairs = {
             phoneme: "ʌ"
         }
     },
-    "fall-full": {
-        left: {
-            id: "fall",
-            label: "fall",
-            phoneme: "ɔ"
-        },
-        right: {
-            id: "full",
-            label: "full",
-            phoneme: "ʌ"
-        }
-    },
     "mall-mull": {
         left: {
             id: "mall",
@@ -789,6 +777,21 @@ const MasonPairs: MinimalPairs = {
             id: "gull",
             label: "gull",
             phoneme: "ʌ"
+        }
+    },
+    /* #endregion */
+
+    /* #region /ɔ/ vs /ʊ/ */
+    "fall-full": {
+        left: {
+            id: "topquark_fall",
+            label: "fall",
+            phoneme: "ɔ"
+        },
+        right: {
+            id: "topquark_full",
+            label: "full",
+            phoneme: "ʊ"
         }
     },
     /* #endregion */
