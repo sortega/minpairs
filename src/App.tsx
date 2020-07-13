@@ -13,7 +13,8 @@ import './App.css';
 function randomSubset<T>(array: T[], size: number) {
   return array.map(value => ({ value, score: Math.random() }))
     .sort((a, b) => a.score - b.score)
-    .slice(0, size).map(pair => pair.value);
+    .slice(0, size)
+    .map(pair => pair.value);
 }
 
 enum Stage {
