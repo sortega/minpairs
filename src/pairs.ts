@@ -757,7 +757,7 @@ const MasonPairs: MinimalPairs = {
     },
     "mall-mull": {
         left: {
-            id: "mall",
+            id: "mall2",
             label: "mall",
             phoneme: "ɔ"
         },
