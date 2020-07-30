@@ -1,10 +1,9 @@
 import React from 'react';
 import { Button, Col, InputNumber, Row } from 'antd';
-import { MinimalPairs } from './model';
+import Pairs from './pairs';
 import PhonemeCheckGroup from './PhonemeCheckGroup';
 
 interface SessionOptionsProps {
-    pairs: MinimalPairs,
     onComplete: (opts: { pairsToTrain: number, phonemePairIds: string[] }) => void,
 }
 
@@ -17,7 +16,7 @@ interface SessionOptionsState {
 
 class SessionOptions extends React.Component<SessionOptionsProps, SessionOptionsState> {
     state = {
-        pairsToTrain: Object.keys(this.props.pairs).length,
+        pairsToTrain: Object.keys(Pairs).length,
         selectedMonopthongs: [],
         selectedDitphthongs: [],
         selectedOtherPhonemes: [],
@@ -25,17 +24,18 @@ class SessionOptions extends React.Component<SessionOptionsProps, SessionOptions
 
     selectedPhonemes() {
         const { selectedMonopthongs, selectedDitphthongs, selectedOtherPhonemes } = this.state;
-        return selectedMonopthongs.concat(selectedDitphthongs, selectedOtherPhonemes)
+        return selectedMonopthongs.concat(selectedDitphthongs, selectedOtherPhonemes);
     }
 
     onComplete() {
         const { pairsToTrain } = this.state;
         const phonemePairIds = this.filterPairIdsBySelectedPhonemes(this.selectedPhonemes());
+        console.log("completed with", pairsToTrain, phonemePairIds)
         this.props.onComplete({ pairsToTrain, phonemePairIds });
     }
 
     filterPairIdsBySelectedPhonemes(selectedPhonemes: string[]): string[] {
-        return Object.entries(this.props.pairs)
+        return Object.entries(Pairs)
             .filter(entry => {
                 const pair = entry[1];
                 return selectedPhonemes.includes(pair.left.phoneme) &&
@@ -46,7 +46,7 @@ class SessionOptions extends React.Component<SessionOptionsProps, SessionOptions
 
     uniquePhonemes(): Array<{ phoneme: string, count: number }> {
         const deduped: { [key: string]: { phoneme: string, count: number } } = {};
-        Object.values(this.props.pairs).forEach(pair => {
+        Object.values(Pairs).forEach(pair => {
             const left = pair.left.phoneme;
             const right = pair.right.phoneme;
             [left, right].forEach(phoneme => {
@@ -74,8 +74,8 @@ class SessionOptions extends React.Component<SessionOptionsProps, SessionOptions
         const otherPhonemes = this.uniquePhonemes()
             .map(entry => entry.phoneme)
             .filter(phoneme => monopthongs.indexOf(phoneme) < 0 && diphthongs.indexOf(phoneme) < 0)
-            .sort((l, r) => l.localeCompare(r))
-
+            .sort((l, r) => l.localeCompare(r));
+        
         return <>
             <Row gutter={[16, 16]} style={{ textAlign: "left" }}>
                 <Col span={12} style={{ textAlign: "right", lineHeight: "32px" }}>
@@ -88,7 +88,7 @@ class SessionOptions extends React.Component<SessionOptionsProps, SessionOptions
                         style={{ width: "4em" }}
                         value={this.state.pairsToTrain}
                         // TODO: handle undefined for this handler
-                        onChange={value => this.setState({ pairsToTrain: value || maxPairs })}
+                        onChange={value => this.setState({ pairsToTrain: Math.max(value || maxPairs, 1) })}
                     />
                     &nbsp;
                     / {maxPairs}
@@ -105,18 +105,18 @@ class SessionOptions extends React.Component<SessionOptionsProps, SessionOptions
                 name="Diphthongs"
                 phonemes={diphthongs}
                 initialSelection={[]}
-                onChange={e => { }} />
+                onChange={selectedDitphthongs => { this.setState({ selectedDitphthongs }) }} />
 
             <PhonemeCheckGroup
                 name="Other phonemes"
                 phonemes={otherPhonemes}
                 initialSelection={otherPhonemes}
-                onChange={e => { }} />
+                onChange={selectedOtherPhonemes => { this.setState({ selectedOtherPhonemes }) }} />
 
             <Button
                 type="primary"
                 onClick={this.onComplete.bind(this)}
-                disabled={this.selectedPhonemes().length === 0}>
+                disabled={maxPairs === 0}>
                 Start training
             </Button>
         </>;
