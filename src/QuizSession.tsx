@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Button, Col, Row } from 'antd';
 import Sound from 'react-sound';
 
@@ -31,6 +31,41 @@ class QuizSession extends React.Component<QuizSessionProps, QuizSessionState> {
         }
     }
 
+    componentDidMount() {
+        window.addEventListener("keydown", this.keydownListener.bind(this), true);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("keydown", this.keydownListener.bind(this), true);
+    }
+
+    keydownListener(event: KeyboardEvent) {
+        const { currentQuestion, sound } = this.state;
+        const { correctAnswer, actualAnswer } = currentQuestion;
+        switch (event.keyCode) {
+            case 37: // Left
+                if (actualAnswer) {
+                    sound || this.play(Side.Left);
+                } else {
+                    this.doAnswer(Side.Left);
+                }
+                break;
+            case 39: // Right
+                if (actualAnswer) { 
+                    sound || this.play(Side.Right);
+                } else {
+                    this.doAnswer(Side.Right);
+                }
+                break;
+            case 32: // Space
+                if (actualAnswer) {
+                    sound || this.nextQuestion();
+                } else {
+                    sound || this.play(correctAnswer);
+                }
+        }
+    }
+
     chooseNextQuestion(activePairs: string[]): Question {
         const correctAnswer = (Math.random() < 0.5) ? Side.Left : Side.Right;
         const index = Math.floor(Math.random() * activePairs.length);
@@ -43,7 +78,7 @@ class QuizSession extends React.Component<QuizSessionProps, QuizSessionState> {
 
     play(side: Side) {
         this.setState(state => {
-            return { ...state, sound: side, soundQueue: []};
+            return { ...state, sound: side, soundQueue: [] };
         })
     }
 
@@ -52,9 +87,9 @@ class QuizSession extends React.Component<QuizSessionProps, QuizSessionState> {
             return state;
         }
         return ({
-            ...state, 
-            sound: state.soundQueue[0], 
-            soundQueue: state.soundQueue.slice(1) 
+            ...state,
+            sound: state.soundQueue[0],
+            soundQueue: state.soundQueue.slice(1)
         });
     }
 
@@ -139,7 +174,7 @@ class QuizSession extends React.Component<QuizSessionProps, QuizSessionState> {
                         loading={!!(actualAnswer && sound === Side.Left)}
                         danger={actualAnswer === Side.Left && actualAnswer !== correctAnswer}>
                         {pair.left.label} /{pair.left.phoneme}/
-              </Button>
+                    </Button>
                 </Col>
                 <Col span={12}>
                     <Button className="answer"
@@ -148,7 +183,7 @@ class QuizSession extends React.Component<QuizSessionProps, QuizSessionState> {
                         loading={!!(actualAnswer && sound === Side.Right)}
                         danger={actualAnswer === Side.Right && actualAnswer !== correctAnswer}>
                         {pair.right.label} /{pair.right.phoneme}/
-              </Button>
+                    </Button>
                 </Col>
             </Row>
             <Row gutter={[16, 16]}>
@@ -179,11 +214,11 @@ class QuizSession extends React.Component<QuizSessionProps, QuizSessionState> {
         }
         const pairId = currentQuestion.pairId;
         const soundId = sound ? Pairs[pairId][sound].id : null;
-        return (soundId 
+        return (soundId
             ? <Sound
                 url={`/sounds/${soundId}.mp3`}
                 playStatus={'PLAYING'}
-                onFinishedPlaying={this.onFinishSound.bind(this)}/>
+                onFinishedPlaying={this.onFinishSound.bind(this)} />
             : <></>);
     }
 }
