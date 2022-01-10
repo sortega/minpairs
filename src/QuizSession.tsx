@@ -41,11 +41,9 @@ class QuizSession extends React.Component<QuizSessionProps, QuizSessionState> {
         });
     }
 
-    play(side: Side, enqueue: Boolean = false) {
+    play(side: Side) {
         this.setState(state => {
-            return enqueue 
-                ? this.playNextSound({ ...state, soundQueue: [...state.soundQueue, side] })
-                : this.playNextSound({ ...state, sound: undefined, soundQueue: [side]});
+            return { ...state, sound: side, soundQueue: []};
         })
     }
 
@@ -78,30 +76,27 @@ class QuizSession extends React.Component<QuizSessionProps, QuizSessionState> {
                 ...state,
                 activePairs,
                 currentQuestion,
-                sound: undefined,
+                sound: actualAnswer,
+                soundQueue: (actualAnswer === Side.Right) ? [Side.Left] : [Side.Right],
                 questionOutcomes
             });
         })
-        this.play(actualAnswer);
-        this.play(actualAnswer === Side.Right ? Side.Left : Side.Right, true);
     }
 
     nextQuestion() {
         if (this.state.activePairs.length === 0) {
             this.props.onSessionComplete(this.state.questionOutcomes)
         } else {
-            const correctAnswer = (Math.random() < 0.5) ? Side.Left : Side.Right;
             this.setState(state => {
                 const { activePairs } = state;
                 const currentQuestion = this.chooseNextQuestion(activePairs);
                 return ({
                     ...state,
                     currentQuestion,
-                    sound: undefined,
+                    sound: currentQuestion.correctAnswer,
                     soundQueue: []
                 });
             });
-            this.play(correctAnswer);
         }
     }
 
@@ -140,7 +135,7 @@ class QuizSession extends React.Component<QuizSessionProps, QuizSessionState> {
                 <Col span={12}>
                     <Button className="answer"
                         type={actualAnswer && (correctAnswer === Side.Left) ? "primary" : "default"}
-                        onClick={actualAnswer ? this.play.bind(this, Side.Left, false) : this.doAnswer.bind(this, Side.Left)}
+                        onClick={actualAnswer ? this.play.bind(this, Side.Left) : this.doAnswer.bind(this, Side.Left)}
                         loading={!!(actualAnswer && sound === Side.Left)}
                         danger={actualAnswer === Side.Left && actualAnswer !== correctAnswer}>
                         {pair.left.label} /{pair.left.phoneme}/
@@ -149,7 +144,7 @@ class QuizSession extends React.Component<QuizSessionProps, QuizSessionState> {
                 <Col span={12}>
                     <Button className="answer"
                         type={actualAnswer && (correctAnswer === Side.Right) ? "primary" : "default"}
-                        onClick={actualAnswer ? this.play.bind(this, Side.Right, false) : this.doAnswer.bind(this, Side.Right)}
+                        onClick={actualAnswer ? this.play.bind(this, Side.Right) : this.doAnswer.bind(this, Side.Right)}
                         loading={!!(actualAnswer && sound === Side.Right)}
                         danger={actualAnswer === Side.Right && actualAnswer !== correctAnswer}>
                         {pair.right.label} /{pair.right.phoneme}/
@@ -167,7 +162,7 @@ class QuizSession extends React.Component<QuizSessionProps, QuizSessionState> {
                             </Button>
                             : <Button
                                 className="action"
-                                onClick={this.play.bind(this, correctAnswer, false)}
+                                onClick={this.play.bind(this, correctAnswer)}
                                 loading={!!sound}>
                                 Replay
                             </Button>
@@ -184,12 +179,12 @@ class QuizSession extends React.Component<QuizSessionProps, QuizSessionState> {
         }
         const pairId = currentQuestion.pairId;
         const soundId = sound ? Pairs[pairId][sound].id : null;
-        const soundUrl = `/sounds/${soundId}.mp3`;
-        return (<Sound
-            url={soundUrl}
-            playStatus={soundId ? 'PLAYING' : 'STOPPED'}
-            onFinishedPlaying={this.onFinishSound.bind(this)}
-        />);
+        return (soundId 
+            ? <Sound
+                url={`/sounds/${soundId}.mp3`}
+                playStatus={'PLAYING'}
+                onFinishedPlaying={this.onFinishSound.bind(this)}/>
+            : <></>);
     }
 }
 

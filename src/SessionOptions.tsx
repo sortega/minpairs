@@ -30,7 +30,6 @@ class SessionOptions extends React.Component<SessionOptionsProps, SessionOptions
     onComplete() {
         const { pairsToTrain } = this.state;
         const phonemePairIds = this.filterPairIdsBySelectedPhonemes(this.selectedPhonemes());
-        console.log("completed with", pairsToTrain, phonemePairIds)
         this.props.onComplete({ pairsToTrain, phonemePairIds });
     }
 
